@@ -9,21 +9,19 @@ class FlatIterator:
         return self
 
     def __next__(self):
+        if self.cursor == len(self.list_of_lists):
+            raise StopIteration
         self.item = self.list_of_lists[self.cursor][self.inner_cursor]
-        if self.inner_cursor < len(self.list_of_lists[self.cursor]):
+        if self.inner_cursor < len(self.list_of_lists[self.cursor]) - 1:
             self.inner_cursor += 1
         else:
             self.cursor += 1
             self.inner_cursor = 0
-        if self.cursor < len(self.list_of_lists):
-            return self.item
-        else:
-            raise StopIteration
 
+        return self.item
 
 
 def test_1():
-
     list_of_lists_1 = [
         ['a', 'b', 'c'],
         ['d', 'e', 'f', 'h', False],
@@ -35,7 +33,6 @@ def test_1():
             ['a', 'b', 'c', 'd', 'e', 'f', 'h', False, 1, 2, None]
     ):
         assert flat_iterator_item == check_item
-    asd = list(FlatIterator(list_of_lists_1))
 
     assert list(FlatIterator(list_of_lists_1)) == ['a', 'b', 'c', 'd', 'e', 'f', 'h', False, 1, 2, None]
 
